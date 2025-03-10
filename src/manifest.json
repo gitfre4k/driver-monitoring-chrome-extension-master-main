@@ -1,0 +1,33 @@
+{
+    "manifest_version": 3,
+    "name": "Driver Monitoring Chrome Extension",
+    "version": "1.0.0",
+    "description": "qweqweqwe",
+    "permissions": [
+        "https://app.monitoringdriver.com/*",
+        "storage",
+        "tabs",
+        "activeTab",
+        "cookies",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://app.monitoringdriver.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "index.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.monitoringdriver.com/*"
+            ],
+            "js": [
+                "content-script.js"
+            ]
+        }
+    ]
+}
