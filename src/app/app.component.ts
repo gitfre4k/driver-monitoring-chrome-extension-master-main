@@ -8,6 +8,8 @@ import { ApiService } from './api/api.service';
 })
 export class AppComponent {
   title = 'driver-monitoring-chrome-extension';
+  logs: any;
+  localStorrage: any;
 
   private apiService: ApiService = inject(ApiService);
 
@@ -19,6 +21,7 @@ export class AppComponent {
     console.log('Getting logs 1...');
     this.driverDailyLog$.subscribe((data) => {
       console.log(data);
+      this.logs = data;
     });
   };
 
@@ -42,7 +45,7 @@ export class AppComponent {
         },
         (results) => {
           if (results && results[0] && !chrome.runtime.lastError) {
-            console.log(results[0].result);
+            this.localStorrage = results[0].result;
           } else {
             console.error(chrome.runtime.lastError);
           }
