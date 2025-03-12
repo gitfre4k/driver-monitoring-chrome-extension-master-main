@@ -38,6 +38,8 @@ export class AppComponent {
           .subscribe({
             next: (data) => {
               console.log('Daily logs: ', data);
+              console.log('Company Name:', data.companyName);
+              console.log('Driver Name', data.driverFullName);
               console.log('Events: ', data.events);
 
               for (let i in data.events) {
