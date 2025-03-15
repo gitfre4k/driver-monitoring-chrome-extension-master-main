@@ -9,8 +9,12 @@
         "activeTab",
         "cookies",
         "scripting",
+        "sidePanel",
         "https://app.monitoringdriver.com/*"
     ],
+    "side_panel": {
+        "default_path": "index.html"
+    },
     "host_permissions": [
         "https://app.monitoringdriver.com/*"
     ],

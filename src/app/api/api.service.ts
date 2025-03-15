@@ -3,10 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, from, map, Observable, of } from 'rxjs';
 import { FormattedDateService } from '../web-app/formatted-date.service';
 
-interface Company {
-  id: string;
-  name: string;
-}
+import { IViolations, ICompany } from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +17,7 @@ export class ApiService {
 
   getAccessibleTenants() {
     return from(
-      this.http.get<Company[]>(
+      this.http.get<ICompany[]>(
         'https://app.monitoringdriver.com/api/Tenant/GetAccessibleTenants',
         { withCredentials: true }
       )
@@ -29,16 +26,16 @@ export class ApiService {
 
   // https://app.monitoringdriver.com/api/Violations/GetViolations
 
-  getViolation(tenant: Company) {
+  getViolations(tenant: ICompany): Observable<IViolations> {
     const formattedDate = this.formattedDateService.getFormatedDates();
 
-    console.log(tenant.name);
+    // console.log(tenant.name);
 
     if (tenant.name === 'Dex Solutions') return EMPTY;
     if (tenant.name === 'Rabbit logistics llc') return EMPTY;
 
     return from(
-      this.http.post(
+      this.http.post<IViolations>(
         'https://app.monitoringdriver.com/api/Violations/GetViolations',
         {
           filterRule: {

@@ -1,5 +1,21 @@
-<button (click)="getEvents()">GET EVENTS</button>
-<button (click)="getAllViolations()">getAllViolations</button>
-<!-- <button (click)="getViolations()">getViolations</button> -->
 
-<p></p>
+@if (!violations.length) {
+    <button (click)="getEvents()">GET EVENTS</button>
+    <button (click)="getAllViolations()">getAllViolations</button>
+    <button (click)="popUp()">popUp</button> 
+
+} @else {
+    <h2>Violations</h2>
+    ```````````````````
+    @for (violation of violations; track violation.company) {
+        <h3>{{violation.company}}</h3>
+        @for (item of violation.violations.items; track item.id) {
+            <h4>{{item.driverName}}</h4>
+            @for (v of item.violations; track v.violationId){
+                <p>{{v.type}}</p>
+            }
+        }
+    }
+    ```````````````````
+    <button (click)="violations=[]">Close</button>
+}
