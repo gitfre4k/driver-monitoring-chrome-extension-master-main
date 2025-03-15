@@ -17,10 +17,6 @@ export class AppComponent {
 
   constructor() {}
 
-  getAccessibleTenants = () => {
-    this.apiService.getAccessibleTenants();
-  };
-
   // getTenants = () => {
   //   this.apiService
   //     .getAccessibleTenants()
