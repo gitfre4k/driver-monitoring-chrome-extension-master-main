@@ -13,57 +13,62 @@ interface Company {
 })
 export class ApiService {
   private http: HttpClient = inject(HttpClient);
-  private formattedDateService: FormattedDateService = inject(FormattedDateService)
+  private formattedDateService: FormattedDateService =
+    inject(FormattedDateService);
 
-  constructor() { }
+  constructor() {}
 
   getAccessibleTenants() {
-    return from(this.http.get<Company[]>(
-      'https://app.monitoringdriver.com/api/Tenant/GetAccessibleTenants',
-      { withCredentials: true }
-    ))
+    return from(
+      this.http.get<Company[]>(
+        'https://app.monitoringdriver.com/api/Tenant/GetAccessibleTenants',
+        { withCredentials: true }
+      )
+    );
   }
 
   // https://app.monitoringdriver.com/api/Violations/GetViolations
 
   getViolation(tenant: Company) {
-    const formattedDate = this.formattedDateService.getFormatedDates()
+    const formattedDate = this.formattedDateService.getFormatedDates();
 
-    console.log(tenant.name)
+    console.log(tenant.name);
 
-    if (tenant.name === ("Dex Solutions")) return EMPTY;
-    if (tenant.name === ('Rabbit logistics llc')) return EMPTY;
+    if (tenant.name === 'Dex Solutions') return EMPTY;
+    if (tenant.name === 'Rabbit logistics llc') return EMPTY;
 
-    return from(this.http.post(
-      'https://app.monitoringdriver.com/api/Violations/GetViolations',
-      {
-        filterRule: {
-          condition: "AND",
-          filterRules: [
-            {
-              field: "dateFrom",
-              operator: "equals",
-              value: formattedDate.sevenDaysAgo
-            },
-            {
-              field: "dateTo",
-              operator: "equals",
-              value: formattedDate.currentDate
-            }
-          ]
+    return from(
+      this.http.post(
+        'https://app.monitoringdriver.com/api/Violations/GetViolations',
+        {
+          filterRule: {
+            condition: 'AND',
+            filterRules: [
+              {
+                field: 'dateFrom',
+                operator: 'equals',
+                value: formattedDate.sevenDaysAgo,
+              },
+              {
+                field: 'dateTo',
+                operator: 'equals',
+                value: formattedDate.currentDate,
+              },
+            ],
+          },
+          searchRule: { columns: ['driverName'], text: '' },
+          sorting: 'driverName asc',
+          skipCount: 0,
+          maxResultCount: 25,
         },
-        searchRule: { columns: ['driverName'], text: '' },
-        sorting: 'driverName asc',
-        skipCount: 0,
-        maxResultCount: 25,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          'X-Tenant-Id': `${tenant.id}`,
-        },
-      }
-    ))
+        {
+          withCredentials: true,
+          headers: {
+            'X-Tenant-Id': `${tenant.id}`,
+          },
+        }
+      )
+    );
   }
 
   // '3a13ca94-18b5-41be-4a36-7f024111c52a'
@@ -87,4 +92,3 @@ export class ApiService {
     );
   }
 }
-

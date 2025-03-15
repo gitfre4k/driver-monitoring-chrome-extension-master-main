@@ -15,32 +15,37 @@ export class AppComponent {
   private apiService: ApiService = inject(ApiService);
   private urlParamsService: UrlParamsService = inject(UrlParamsService);
 
-  tenants!: { id: string, name: string }[];
+  tenants!: { id: string; name: string }[];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    this.apiService.getAccessibleTenants().pipe(map(companies => {
-      console.log(companies)
-      return companies.map(c => c)
-    })).subscribe({
-      next: (q) => { this.tenants = q; console.log(this.tenants) }
-    })
+    this.apiService
+      .getAccessibleTenants()
+      .pipe(
+        map((companies) => {
+          console.log(companies);
+          return companies.map((c) => c);
+        })
+      )
+      .subscribe({
+        next: (q) => {
+          this.tenants = q;
+          console.log(this.tenants);
+        },
+      });
   }
 
   getAllViolations = () => {
-    const tenantsIds$ = from(this.tenants)
-    tenantsIds$.pipe(
-      concatMap(t => this.apiService.getViolation(t))
-    ).subscribe({
-      next: (v) => console.log(v),
-      error: (error) =>
-        console.error('Error:', error),
-      complete: () =>
-        console.log('Completed processing violations.')
-
-    })
-  }
+    const tenantsIds$ = from(this.tenants);
+    tenantsIds$
+      .pipe(concatMap((t) => this.apiService.getViolation(t)))
+      .subscribe({
+        next: (v) => console.log(v),
+        error: (error) => console.error('Error:', error),
+        complete: () => console.log('Completed processing violations.'),
+      });
+  };
 
   // .pipe(map((tenants) => tenants.forEach((company) => of(company.id))), concatMap((company) => this.apiService.getViolations(id)))
 
