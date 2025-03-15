@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ApiService } from './api/api.service';
 import { UrlParamsService } from './chrome/url-params.service';
-import { Observable } from 'rxjs';
+import { from, Observable, of, Subject } from 'rxjs';
+import { concatMap, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,74 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   title = 'driver-monitoring-chrome-extension';
-  localStorrage: any;
-
-  driverDailyLogEvents$!: Observable<any>;
 
   private apiService: ApiService = inject(ApiService);
   private urlParamsService: UrlParamsService = inject(UrlParamsService);
 
   constructor() {}
 
-  ngOnInit() {}
+  // getTenants = () => {
+  //   this.apiService
+  //     .getAccessibleTenants()
+  //     .pipe(
+  //       concatMap((tenants) => {
+  //         tenants.forEach(company => )
+  //       })
+  //     )
+
+  //     .subscribe();
+
+  // .pipe(map((tenants) => tenants.forEach((company) => of(company.id))), concatMap((company) => this.apiService.getViolations(id)))
+
+  // .subscribe({
+  //   next: (tenants: any) => {
+  //     console.log(tenants);
+  //     for (let t in tenants) {
+  //       console.log(tenants[t].name);
+  //       console.log(tenants[t].id);
+  //     }
+  //   },
+  //   error: (error) => {
+  //     console.error(error);
+  //   },
+  // });
+  // }
+
+  // getAllViolations = () => {
+  //   this.apiService.getAccessibleTenants().pipe(
+  //     map((tenants: any) => ),
+  //     concatMap(this.apiService.getViolations())
+  //   );
+  // };
+
+  // this.apiService.getAccessibleTenants().pipe(
+  //   concatMap(
+  //     (tenants: any) => {
+  //       return this.apiService.getViolations
+  //     }
+  //   )
+  // )
+
+  //   this.apiService.getViolations().subscribe({
+  //     next: (data) => {
+  //       console.log(data);
+  //     },
+  //     error: (error) => {
+  //       console.error(error);
+  //     },
+  //   });
+  // };
+
+  // getViolations = () => {
+  //   this.apiService.getViolations().subscribe({
+  //     next: (data) => {
+  //       console.log(data);
+  //     },
+  //     error: (error) => {
+  //       console.error(error);
+  //     },
+  //   });
+  // };
 
   getEvents = () => {
     let driverId: number;
