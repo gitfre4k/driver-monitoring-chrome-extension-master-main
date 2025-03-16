@@ -1,0 +1,34 @@
+<div class="dialog">
+    <h2 mat-dialog-title>Violations</h2>
+
+    @if (!violations.length) {
+    <mat-dialog-content>No violations detected.</mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close>OK</button>
+    </mat-dialog-actions>
+    }
+
+    @else {
+    <mat-dialog-content class="mat-typography">
+        @for (violation of violations; track violation.company) {
+        <h3># {{ violation.company }}</h3>
+
+        @for (item of violation.violations.items; track item.id) {
+        <p>{{ item.driverName }}</p>
+        <ul>
+            @for (v of item.violations; track v.violationId){
+            <li>
+                <p>{{ v.type }}</p>
+            </li>
+            }
+        </ul>
+        }
+        <mat-divider></mat-divider>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+    }
+</div>

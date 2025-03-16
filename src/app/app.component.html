@@ -1,21 +1,33 @@
+<mat-card appearance="outlined">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Violations">Violations</mat-tab>
+        <mat-tab label="Teleport">Teleport</mat-tab>
+        <mat-tab label="About">About</mat-tab>
+    </mat-tab-group>
 
-@if (!violations.length) {
-    <button (click)="getEvents()">GET EVENTS</button>
-    <button (click)="getAllViolations()">getAllViolations</button>
-    <button (click)="popUp()">popUp</button> 
+    @if (!gettingAllViolations) {
+    <h2>Driver Monitoring</h2>
+    <h3>webApp chrome extension v0.1</h3>
 
-} @else {
-    <h2>Violations</h2>
-    ```````````````````
-    @for (violation of violations; track violation.company) {
-        <h3>{{violation.company}}</h3>
-        @for (item of violation.violations.items; track item.id) {
-            <h4>{{item.driverName}}</h4>
-            @for (v of item.violations; track v.violationId){
-                <p>{{v.type}}</p>
-            }
-        }
+    <button mat-stroked-button (click)="getEvents()">GET EVENTS</button>
+    <button mat-button (click)="popUp()">popUp</button>
+    <button mat-button (click)="openDialog()">Open Violations</button>
+    <button mat-raised-button (click)="getAllViolations()">Get All Violations</button>
+
+
+    } @else {
+    <mat-card class="example-card">
+        <mat-card-content>
+            <h2 class="example-h2">Getting all violations...</h2>
+            <p>{{progressBar.currentCompany}}</p>
+            <section class="example-section">
+                <mat-progress-bar class="example-margin" [mode]="progressBar.mode" [value]="progressBar.value"
+                    [bufferValue]="progressBar.bufferValue">
+                </mat-progress-bar>
+            </section>
+            <button mat-button (click)="stopGetAllViolations()">Stop</button>
+            <p style="text-align: right;">Total count: {{progressBar.totalCount}}</p>
+        </mat-card-content>
+    </mat-card>
     }
-    ```````````````````
-    <button (click)="violations=[]">Close</button>
-}
+</mat-card>
