@@ -71,11 +71,12 @@ span {
   justify-content: end;
   align-items: center;
   height: 85%;
+  gap: 32px;
 }
 
 .open-in-new-window {
   position: absolute;
-  right: 16px;
-  top: 16px;
+  right: 20px;
+  top: 20px;
   z-index: 100;
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, from, map, Observable, of } from 'rxjs';
+import { EMPTY, from, Observable } from 'rxjs';
 import { FormattedDateService } from '../web-app/formatted-date.service';
 
 import { IViolations, ICompany } from '../interfaces';
@@ -24,12 +24,8 @@ export class ApiService {
     );
   }
 
-  // https://app.monitoringdriver.com/api/Violations/GetViolations
-
   getViolations(tenant: ICompany): Observable<IViolations> {
     const formattedDate = this.formattedDateService.getFormatedDates();
-
-    // console.log(tenant.name);
 
     if (tenant.name === 'Dex Solutions') return EMPTY;
     if (tenant.name === 'Rabbit logistics llc') return EMPTY;
@@ -67,8 +63,6 @@ export class ApiService {
       )
     );
   }
-
-  // '3a13ca94-18b5-41be-4a36-7f024111c52a'
 
   getDriverDailyLogEvents(
     driverId: number,

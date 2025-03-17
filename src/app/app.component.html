@@ -1,7 +1,7 @@
 <div id="wrapper">
     @if (!gettingAllViolations) {
 
-    <a class="open-in-new-window" (click)="popUp()"><mat-icon>open_in_new</mat-icon></a>
+    <a class="open-in-new-window" (click)="popUp()" matTooltip="Open in new window"><mat-icon>open_in_new</mat-icon></a>
     <mat-card appearance="outlined" id="mat-card-wrapper">
 
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight="true" id="tab-group">
@@ -11,6 +11,13 @@
                     <span>Violations</span>
                 </ng-template>
                 <div class="tab-group tab-group-1">
+
+
+                    <button mat-raised-button (click)="generateErrorReport()" [disabled]="!errorReport">
+                        <mat-icon *ngIf="!!errorReport">priority_high</mat-icon>
+                        Generate Error Report</button>
+
+
                     <button mat-raised-button (click)="getAllViolations()">Scan</button>
                 </div>
             </mat-tab>

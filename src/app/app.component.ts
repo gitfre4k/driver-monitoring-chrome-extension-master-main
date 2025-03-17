@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ApiService } from './api/api.service';
 import { UrlParamsService } from './chrome/url-params.service';
 import { from, Subscription } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, tap } from 'rxjs/operators';
 
 import { IViolations, ICompany, IProgressBar } from './interfaces';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressBarModule,
     MatTabsModule,
     MatIconModule,
+    MatTooltipModule,
   ],
 })
 export class AppComponent {
@@ -37,6 +40,7 @@ export class AppComponent {
 
   tenants: { id: string; name: string }[] = [];
   violations: { company: string; violations: IViolations }[] = [];
+  errorReport: string = '';
 
   gettingAllViolations = false;
 
@@ -56,6 +60,8 @@ export class AppComponent {
   private apiService: ApiService = inject(ApiService);
   private urlParamsService: UrlParamsService = inject(UrlParamsService);
 
+  private _snackBar = inject(MatSnackBar);
+
   constructor() {}
 
   ngOnInit() {
@@ -74,6 +80,11 @@ export class AppComponent {
       });
   }
 
+  generateErrorReport() {
+    navigator.clipboard.writeText(this.errorReport);
+    this._snackBar.open('Copied successfully', 'OK', { duration: 2000 });
+  }
+
   openDialog() {
     const dialogRef = this.dialog.open(ViolationsComponent);
     let instance = dialogRef.componentInstance;
@@ -82,7 +93,6 @@ export class AppComponent {
   }
 
   popUp() {
-    // window.open('index.html', 'popup', 'resizable=no');
     const windowFeatures =
       'resizable=no,target="dmcev001win",left=100,top=100,width=536,height=640';
     window.open('index.html', '', windowFeatures);
@@ -132,9 +142,25 @@ export class AppComponent {
         },
         error: (error) => {
           console.error('Error:', error);
-          alert('Error:\n\t' + error.name + '\n\t' + error.message);
-          this.progressBar.value = 0;
-          this.gettingAllViolations = false;
+          this._snackBar
+            .open('An error occurred', 'Close')
+            .afterDismissed()
+            .pipe(
+              tap((err) => {
+                this.errorReport = JSON.stringify({
+                  source: 'Violation Error Report',
+                  time: Date.now(),
+                  error,
+                  err,
+                  tenants: this.tenants,
+                  violations: this.violations,
+                  currentCompany,
+                });
+                this.progressBar.value = 0;
+                this.gettingAllViolations = false;
+              })
+            )
+            .subscribe();
         },
         complete: () => {
           this.progressBar.value = 100;
