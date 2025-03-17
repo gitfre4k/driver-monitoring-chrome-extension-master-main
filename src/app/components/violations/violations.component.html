@@ -1,5 +1,9 @@
 <div class="dialog">
-    <h2 mat-dialog-title>Violations</h2>
+
+    <div class="violation-report">
+        <mat-icon>article</mat-icon>
+        <h3 mat-dialog-title>Violations</h3>
+    </div>
 
     @if (!violations.length) {
     <mat-dialog-content>No violations detected.</mat-dialog-content>
@@ -25,10 +29,10 @@
         }
         <mat-divider></mat-divider>
         }
-    </mat-dialog-content>
 
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Close</button>
-    </mat-dialog-actions>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Close</button>
+        </mat-dialog-actions>
+    </mat-dialog-content>
     }
 </div>

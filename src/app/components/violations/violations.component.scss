@@ -1,7 +1,23 @@
 .dialog {
   text-align: left;
-}
 
-h3 {
-  font-weight: 500;
+  .violation-report {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    text-align: left;
+
+    :first-child {
+      margin-top: 8px;
+      margin-left: 16px;
+      margin-right: 8px;
+      padding: 0;
+    }
+  }
+
+  h3 {
+    font-weight: 500;
+    margin-left: 0;
+    padding-left: 0;
+  }
 }

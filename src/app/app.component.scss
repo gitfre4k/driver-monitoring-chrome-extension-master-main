@@ -21,10 +21,61 @@
 }
 
 #mat-card-wrapper {
+  display: flex;
   flex-grow: 1;
   height: 100%;
+  background-color: rgb(39 39 42);
+}
+
+#mat-card-wrapper-2 {
+  height: 35%;
+  margin-top: 32px;
+  button {
+    margin-top: 16px;
+  }
+  p {
+    margin-top: 32px;
+  }
 }
 
 .tab-group {
-  margin-top: 16px;
+  margin-top: 32px;
+}
+
+.example-margin {
+  margin-top: 32px;
+}
+
+span {
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.tab-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-group.tab-group-3 {
+  align-items: end;
+  justify-content: end;
+  height: 90%;
+  padding-bottom: 128px;
+  padding-right: 16px;
+  p {
+    margin: 0;
+  }
+}
+
+.tab-group.tab-group-1 {
+  justify-content: end;
+  align-items: center;
+  height: 85%;
+}
+
+.open-in-new-window {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 100;
 }

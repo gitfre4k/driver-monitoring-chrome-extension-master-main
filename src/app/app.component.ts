@@ -14,6 +14,7 @@ import { ViolationsComponent } from './components/violations/violations.componen
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatDialogModule,
     MatProgressBarModule,
     MatTabsModule,
+    MatIconModule,
   ],
 })
 export class AppComponent {
@@ -80,7 +82,11 @@ export class AppComponent {
   }
 
   popUp() {
-    window.open('index.html', 'popup', 'resizable=no');
+    // window.open('index.html', 'popup', 'resizable=no');
+    const windowFeatures =
+      'resizable=no,target="dmcev001win",left=100,top=100,width=536,height=640';
+    window.open('index.html', '', windowFeatures);
+    window.close();
   }
 
   stopGetAllViolations = () => {
@@ -91,7 +97,7 @@ export class AppComponent {
 
   getAllViolations = () => {
     this.gettingAllViolations = true;
-    this.progressBar.constant = 100 / this.tenants.length;
+    this.progressBar.constant = 100 / this.tenants.length + 0.2;
     this.progressBar.value = 0;
     this.progressBar.mode = 'determinate';
 
@@ -112,7 +118,7 @@ export class AppComponent {
           console.log(violations);
           this.progressBar.value =
             this.progressBar.value === 0
-              ? (100 / this.tenants.length) * 2.5
+              ? this.progressBar.constant
               : this.progressBar.value + this.progressBar.constant;
           console.log(this.progressBar.value);
           if (violations.totalCount > 0) {
@@ -126,7 +132,7 @@ export class AppComponent {
         },
         error: (error) => {
           console.error('Error:', error);
-          alert('Error:\n\t' + error);
+          alert('Error:\n\t' + error.name + '\n\t' + error.message);
           this.progressBar.value = 0;
           this.gettingAllViolations = false;
         },
@@ -179,62 +185,3 @@ export class AppComponent {
 }
 
 // mock
-
-const mock = [
-  {
-    company: 'KCE Enterprises, LLC',
-    violations: {
-      totalCount: 1,
-      items: [
-        {
-          id: 4,
-          driverId: ' 0002',
-          driverName: 'Barrie Mohamed J',
-          violationsCount: 1,
-          violations: [
-            {
-              violationId: '3a18ac74-1c9e-1948-b7c0-5628656e47e0',
-              type: 'ThirtyMinutesBreakViolation',
-              startTime: '2025-03-15T18:48:34Z',
-              endTime: '2025-03-15T19:14:56.50813Z',
-              logDate: '2025-03-15T04:00:00Z',
-              homeTerminalTimeZone: 'America/New_York',
-            },
-            {
-              violationId: '3a18ac74-1c9e-1238-b7c0-5628656e47e0',
-              type: '11 hours violation',
-              startTime: '2025-03-15T18:48:34Z',
-              endTime: '2025-03-15T19:14:56.50813Z',
-              logDate: '2025-03-15T04:00:00Z',
-              homeTerminalTimeZone: 'America/New_York',
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    company: 'PHP 7 Express, INC',
-    violations: {
-      totalCount: 1,
-      items: [
-        {
-          id: 6,
-          driverId: '  161',
-          driverName: 'Mileta Sarovic',
-          violationsCount: 1,
-          violations: [
-            {
-              violationId: '3a18ad5d-4ee1-ec64-4e06-ff67423a1d2e',
-              type: 'ThirtyMinutesBreakViolation',
-              startTime: '2025-03-15T18:04:07.568Z',
-              endTime: '2025-03-15T19:14:58.5059667Z',
-              logDate: '2025-03-15T05:00:00Z',
-              homeTerminalTimeZone: 'America/Chicago',
-            },
-          ],
-        },
-      ],
-    },
-  },
-];
