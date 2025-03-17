@@ -1,18 +1,33 @@
-<mat-card appearance="outlined">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Violations">Violations</mat-tab>
-        <mat-tab label="Teleport">Teleport</mat-tab>
-        <mat-tab label="About">About</mat-tab>
-    </mat-tab-group>
-
+<div id="wrapper">
     @if (!gettingAllViolations) {
-    <h2>Driver Monitoring</h2>
-    <h3>webApp chrome extension v0.1</h3>
+    <mat-card appearance="outlined" id="mat-card-wrapper">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight="true" id="tab-group">
 
-    <button mat-stroked-button (click)="getEvents()">GET EVENTS</button>
-    <button mat-button (click)="popUp()">popUp</button>
-    <button mat-button (click)="openDialog()">Open Violations</button>
-    <button mat-raised-button (click)="getAllViolations()">Get All Violations</button>
+            <mat-tab label="Violations">
+                <div class="tab-group">
+                    <button mat-raised-button (click)="getAllViolations()">Get All Violations</button>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Test">
+                <div class="tab-group">
+                    <button mat-stroked-button (click)="getEvents()">GET EVENTS</button>
+                    <button mat-button (click)="popUp()">popUp</button>
+                    <button mat-button (click)="openDialog()">Open Violations</button>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="About">
+                <div class="tab-group">
+                    <h2>Driver Monitoring</h2>
+                    <h3>webApp chrome extension v0.1</h3>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+
+
+
 
 
     } @else {
@@ -30,4 +45,4 @@
         </mat-card-content>
     </mat-card>
     }
-</mat-card>
+</div>
