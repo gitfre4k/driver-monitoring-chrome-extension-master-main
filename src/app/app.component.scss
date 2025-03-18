@@ -27,22 +27,7 @@
   background-color: rgb(39 39 42);
 }
 
-#mat-card-wrapper-2 {
-  height: 35%;
-  margin-top: 32px;
-  button {
-    margin-top: 16px;
-  }
-  p {
-    margin-top: 32px;
-  }
-}
-
 .tab-group {
-  margin-top: 32px;
-}
-
-.example-margin {
   margin-top: 32px;
 }
 
@@ -65,13 +50,6 @@ span {
   p {
     margin: 0;
   }
-}
-
-.tab-group.tab-group-1 {
-  justify-content: end;
-  align-items: center;
-  height: 85%;
-  gap: 32px;
 }
 
 .open-in-new-window {

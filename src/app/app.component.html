@@ -1,28 +1,22 @@
 <div id="wrapper">
-    @if (!gettingAllViolations) {
+
 
     <a class="open-in-new-window" (click)="popUp()" matTooltip="Open in new window"><mat-icon>open_in_new</mat-icon></a>
     <mat-card appearance="outlined" id="mat-card-wrapper">
 
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight="true" id="tab-group">
+
             <mat-tab label="Violations">
                 <ng-template mat-tab-label>
                     <mat-icon>error_outline</mat-icon>
                     <span>Violations</span>
                 </ng-template>
-                <div class="tab-group tab-group-1">
 
+                <app-violations></app-violations>
 
-                    <button mat-raised-button (click)="generateErrorReport()" [disabled]="!errorReport">
-                        <mat-icon *ngIf="!!errorReport">priority_high</mat-icon>
-                        Generate Error Report</button>
-
-
-                    <button mat-raised-button (click)="getAllViolations()">Scan</button>
-                </div>
             </mat-tab>
 
-            <mat-tab label="Test" disabled="true">
+            <mat-tab label="Test">
                 <ng-template mat-tab-label>
                     <mat-icon>bug_report</mat-icon>
                     <span>Test</span>
@@ -30,7 +24,6 @@
                 <div class="tab-group tab-group-2">
                     <button mat-stroked-button (click)="getEvents()">GET EVENTS</button>
                     <button mat-button (click)="popUp()">popUp</button>
-                    <button mat-button (click)="openDialog()">Open Violations</button>
                 </div>
             </mat-tab>
 
@@ -49,19 +42,5 @@
     </mat-card>
 
 
-    } @else {
-    <mat-card class="example-card" id="mat-card-wrapper-2">
-        <mat-card-content>
-            <h2 class="example-h2">Violation detection in progress...</h2>
-            <p>{{progressBar.currentCompany}}</p>
-            <section class="example-section">
-                <mat-progress-bar class="example-margin" [mode]="progressBar.mode" [value]="progressBar.value"
-                    [bufferValue]="progressBar.bufferValue">
-                </mat-progress-bar>
-            </section>
-            <button mat-button (click)="stopGetAllViolations()">Stop</button>
-            <p style="text-align: right;">Total count: {{progressBar.totalCount}}</p>
-        </mat-card-content>
-    </mat-card>
-    }
+
 </div>

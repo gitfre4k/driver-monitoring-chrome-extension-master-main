@@ -27,8 +27,8 @@ export class ApiService {
   getViolations(tenant: ICompany): Observable<IViolations> {
     const formattedDate = this.formattedDateService.getFormatedDates();
 
-    if (tenant.name === 'Dex Solutions') return EMPTY;
-    if (tenant.name === 'Rabbit logistics llc') return EMPTY;
+    // if (tenant.name === 'Dex Solutions') return EMPTY;
+    // if (tenant.name === 'Rabbit logistics llc') return EMPTY;
 
     return from(
       this.http.post<IViolations>(

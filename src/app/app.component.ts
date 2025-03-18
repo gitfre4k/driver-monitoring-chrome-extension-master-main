@@ -1,22 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { ApiService } from './api/api.service';
-import { UrlParamsService } from './chrome/url-params.service';
-import { from, Subscription } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
-import { IViolations, ICompany, IProgressBar } from './interfaces';
+import { UrlParamsService } from './chrome/url-params.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ViolationsComponent } from './components/violations/violations.component';
-import { CommonModule } from '@angular/common';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ViolationsComponent } from './components/violations/violations.component';
 
 @Component({
   selector: 'app-root',
@@ -28,69 +23,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDividerModule,
     MatCardModule,
     MatListModule,
-    MatDialogModule,
-    MatProgressBarModule,
     MatTabsModule,
     MatIconModule,
     MatTooltipModule,
+    ViolationsComponent,
   ],
 })
 export class AppComponent {
   title = 'driver-monitoring-chrome-extension';
 
-  tenants: { id: string; name: string }[] = [];
-  violations: { company: string; violations: IViolations }[] = [];
-  errorReport: string = '';
-
-  gettingAllViolations = false;
-
-  progressBar: IProgressBar = {
-    mode: 'determinate',
-    value: 0,
-    bufferValue: 0,
-    constant: 0,
-    currentCompany: '',
-    totalCount: 0,
-  };
-
-  allViolationsSubscribtion = new Subscription();
-
-  readonly dialog = inject(MatDialog);
-
   private apiService: ApiService = inject(ApiService);
   private urlParamsService: UrlParamsService = inject(UrlParamsService);
 
-  private _snackBar = inject(MatSnackBar);
-
   constructor() {}
-
-  ngOnInit() {
-    this.apiService
-      .getAccessibleTenants()
-      .pipe(
-        map((companies) => {
-          return companies.map((c) => c);
-        })
-      )
-      .subscribe({
-        next: (company) => {
-          this.tenants = company;
-          console.log(this.tenants);
-        },
-      });
-  }
-
-  generateErrorReport() {
-    navigator.clipboard.writeText(this.errorReport);
-    this._snackBar.open('Copied successfully', 'OK', { duration: 2000 });
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(ViolationsComponent);
-    let instance = dialogRef.componentInstance;
-    instance.violations = this.violations;
-    dialogRef.afterClosed().subscribe(() => this.stopGetAllViolations());
-  }
 
   popUp() {
     const windowFeatures =
@@ -98,80 +43,6 @@ export class AppComponent {
     window.open('index.html', '', windowFeatures);
     window.close();
   }
-
-  stopGetAllViolations = () => {
-    this.gettingAllViolations = false;
-    this.progressBar.totalCount = 0;
-    this.allViolationsSubscribtion.unsubscribe();
-  };
-
-  getAllViolations = () => {
-    this.gettingAllViolations = true;
-    this.progressBar.constant = 100 / this.tenants.length + 0.2;
-    this.progressBar.value = 0;
-    this.progressBar.mode = 'determinate';
-
-    this.violations = [];
-    const tenants$ = from(this.tenants);
-    let currentCompany: ICompany;
-
-    this.allViolationsSubscribtion = tenants$
-      .pipe(
-        concatMap((tenant) => {
-          currentCompany = tenant;
-          this.progressBar.currentCompany = currentCompany.name;
-          return this.apiService.getViolations(tenant);
-        })
-      )
-      .subscribe({
-        next: (violations) => {
-          console.log(violations);
-          this.progressBar.value =
-            this.progressBar.value === 0
-              ? this.progressBar.constant
-              : this.progressBar.value + this.progressBar.constant;
-          console.log(this.progressBar.value);
-          if (violations.totalCount > 0) {
-            this.progressBar.totalCount =
-              this.progressBar.totalCount + violations.totalCount;
-            this.violations.push({
-              company: currentCompany.name,
-              violations,
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Error:', error);
-          this._snackBar
-            .open('An error occurred', 'Close')
-            .afterDismissed()
-            .pipe(
-              tap((err) => {
-                this.errorReport = JSON.stringify({
-                  source: 'Violation Error Report',
-                  time: Date.now(),
-                  error,
-                  err,
-                  tenants: this.tenants,
-                  violations: this.violations,
-                  currentCompany,
-                });
-                this.progressBar.value = 0;
-                this.gettingAllViolations = false;
-              })
-            )
-            .subscribe();
-        },
-        complete: () => {
-          this.progressBar.value = 100;
-          console.log('Completed processing violations.');
-          console.log(this.violations);
-          this.gettingAllViolations = false;
-          this.openDialog();
-          this.progressBar.value = 0;
-        },
-      });
-  };
 
   getEvents = () => {
     let driverId: number;
