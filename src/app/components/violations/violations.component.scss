@@ -4,10 +4,10 @@
   text-align: center;
 
   button {
-    margin-top: 16px;
+    margin-top: 48px;
   }
   p {
-    margin-top: 32px;
+    margin-top: 18px;
     &.total-count {
       text-align: right;
     }
@@ -30,7 +30,7 @@
 }
 
 .tab-group.tab-group-1 {
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   height: 85%;
   gap: 32px;

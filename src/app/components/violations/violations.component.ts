@@ -7,6 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { ICompany, IProgressBar, IViolations } from '../../interfaces';
 import { ApiService } from '../../api/api.service';
@@ -31,6 +32,7 @@ import { ReportComponent } from '../report/report.component';
     MatProgressBarModule,
     CommonModule,
     MatButtonModule,
+    MatButtonToggleModule,
   ],
   templateUrl: './violations.component.html',
   styleUrl: './violations.component.scss',
@@ -87,7 +89,7 @@ export class ViolationsComponent {
     const tenants$ = this.apiService.getAccessibleTenants().pipe(
       tap((tenants) => {
         this.gettingAllViolations = true;
-        this.progressBar.constant = 105 / tenants.length;
+        this.progressBar.constant = 100 / tenants.length;
         this.progressBar.value = this.progressBar.constant;
         this.progressBar.mode = 'determinate';
       }),
@@ -101,8 +103,11 @@ export class ViolationsComponent {
           this.progressBar.currentCompany = currentCompany.name;
           return this.apiService.getViolations(tenant).pipe(
             tap({
-              error: (error) =>
-                this.errors.push({ error, company: currentCompany }),
+              error: (error) => {
+                this.progressBar.value =
+                  this.progressBar.value + this.progressBar.constant;
+                this.errors.push({ error, company: currentCompany });
+              },
             }),
             catchError(() => of())
           );
@@ -113,9 +118,8 @@ export class ViolationsComponent {
           console.log(violations);
           console.log(this.errors);
           this.progressBar.value =
-            this.progressBar.value === 0
-              ? this.progressBar.constant
-              : this.progressBar.value + this.progressBar.constant;
+            this.progressBar.value + this.progressBar.constant;
+
           console.log(this.progressBar.value);
           if (violations.totalCount > 0) {
             this.progressBar.totalCount =

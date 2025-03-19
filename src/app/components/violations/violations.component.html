@@ -1,6 +1,11 @@
 @if (!gettingAllViolations) {
 
 <div class="tab-group tab-group-1">
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle value="violations">Violations</mat-button-toggle>
+        <mat-button-toggle value="dot" disabled>FMCSA Inpsections</mat-button-toggle>
+        <mat-button-toggle value="ude" disabled>Unidentified Events</mat-button-toggle>
+    </mat-button-toggle-group>
     <button mat-raised-button (click)="generateErrorReport()" [disabled]="!errorReport">
         <mat-icon *ngIf="!!errorReport">priority_high</mat-icon>
         Generate Error Report</button>
