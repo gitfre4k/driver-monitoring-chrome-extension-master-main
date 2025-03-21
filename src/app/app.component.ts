@@ -11,7 +11,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ViolationsComponent } from './components/violations/violations.component';
+import { ScanComponent } from './components/scan/scan.component';
+import { catchError, concatMap, from, mergeMap, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ import { ViolationsComponent } from './components/violations/violations.componen
     MatTabsModule,
     MatIconModule,
     MatTooltipModule,
-    ViolationsComponent,
+    ScanComponent,
   ],
 })
 export class AppComponent {
@@ -42,6 +43,26 @@ export class AppComponent {
       'resizable=no,target="dmcev001win",left=100,top=100,width=536,height=640';
     window.open('index.html', '', windowFeatures);
     window.close();
+  }
+
+  getDOTs() {
+    const tenants$ = this.apiService
+      .getAccessibleTenants()
+      .pipe(mergeMap((tenants) => from(tenants)));
+
+    tenants$
+      .pipe(
+        concatMap((t) =>
+          this.apiService.getDOTInspectionList(t).pipe(
+            tap(() => console.log(t.name)),
+            tap({
+              error: (error) => console.log(error),
+            }),
+            catchError(() => of())
+          )
+        )
+      )
+      .subscribe((q) => console.log(q));
   }
 
   getEvents = () => {

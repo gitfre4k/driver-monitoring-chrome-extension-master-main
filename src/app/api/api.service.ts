@@ -13,6 +13,22 @@ export class ApiService {
   private formattedDateService: FormattedDateService =
     inject(FormattedDateService);
 
+  private filterRule = {
+    condition: 'AND',
+    filterRules: [
+      {
+        field: 'dateFrom',
+        operator: 'equals',
+        value: this.formattedDateService.getFormatedDates().sevenDaysAgo,
+      },
+      {
+        field: 'dateTo',
+        operator: 'equals',
+        value: this.formattedDateService.getFormatedDates().currentDate,
+      },
+    ],
+  };
+
   constructor() {}
 
   getAccessibleTenants() {
@@ -24,31 +40,38 @@ export class ApiService {
     );
   }
 
+  // https://app.monitoringdriver.com/api/FmcsaInspections/GetList
+
+  getDOTInspectionList(tenant: ICompany): Observable<any> {
+    return from(
+      this.http.post(
+        'https://app.monitoringdriver.com/api/FmcsaInspections/GetList',
+        {
+          filterRule: this.filterRule,
+          searchRule: {
+            columns: ['driverId', 'driverFullName', 'vehicleName'],
+            text: '',
+          },
+          sorting: 'driverFullName asc',
+          skipCount: 0,
+          maxResultCount: 25,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            'X-Tenant-Id': `${tenant.id}`,
+          },
+        }
+      )
+    );
+  }
+
   getViolations(tenant: ICompany): Observable<IViolations> {
-    const formattedDate = this.formattedDateService.getFormatedDates();
-
-    // if (tenant.name === 'Dex Solutions') return EMPTY;
-    // if (tenant.name === 'Rabbit logistics llc') return EMPTY;
-
     return from(
       this.http.post<IViolations>(
         'https://app.monitoringdriver.com/api/Violations/GetViolations',
         {
-          filterRule: {
-            condition: 'AND',
-            filterRules: [
-              {
-                field: 'dateFrom',
-                operator: 'equals',
-                value: formattedDate.sevenDaysAgo,
-              },
-              {
-                field: 'dateTo',
-                operator: 'equals',
-                value: formattedDate.currentDate,
-              },
-            ],
-          },
+          filterRule: this.filterRule,
           searchRule: { columns: ['driverName'], text: '' },
           sorting: 'driverName asc',
           skipCount: 0,

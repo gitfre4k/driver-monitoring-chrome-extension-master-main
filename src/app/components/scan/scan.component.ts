@@ -24,7 +24,7 @@ import {
 import { ReportComponent } from '../report/report.component';
 
 @Component({
-  selector: 'app-violations',
+  selector: 'app-scan',
   imports: [
     MatIconModule,
     MatDialogModule,
@@ -34,10 +34,10 @@ import { ReportComponent } from '../report/report.component';
     MatButtonModule,
     MatButtonToggleModule,
   ],
-  templateUrl: './violations.component.html',
-  styleUrl: './violations.component.scss',
+  templateUrl: './scan.component.html',
+  styleUrl: './scan.component.scss',
 })
-export class ViolationsComponent {
+export class ScanComponent {
   errorReport: string = '';
   gettingAllViolations = false;
   violations: { company: string; violations: IViolations }[] = [];
