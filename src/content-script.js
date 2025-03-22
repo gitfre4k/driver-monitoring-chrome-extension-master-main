@@ -1,5 +1,5 @@
 setTimeout(() => {
-  console.log("yoyoy");
+  console.log("yo");
   const statusEvents = document.querySelectorAll('[id^="row-"]');
   statusEvents.forEach((statusEvent) => {
     statusEvent.addEventListener("contextmenu", (event) => {

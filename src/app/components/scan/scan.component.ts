@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { ICompany, IProgressBar, IViolations } from '../../interfaces';
-import { ApiService } from '../../api/api.service';
+import { ApiService } from '../../services/api.service';
 import {
   catchError,
   concatMap,
@@ -86,17 +86,17 @@ export class ScanComponent {
     this.errors = [];
     let currentCompany: ICompany;
 
-    const tenants$ = this.apiService.getAccessibleTenants().pipe(
-      tap((tenants) => {
-        this.gettingAllViolations = true;
-        this.progressBar.constant = 100 / tenants.length;
-        this.progressBar.value = this.progressBar.constant;
-        this.progressBar.mode = 'determinate';
-      }),
-      mergeMap((tenants) => from(tenants))
-    );
-
-    this.allViolationsSubscribtion = tenants$
+    this.allViolationsSubscribtion = this.apiService
+      .getAccessibleTenants()
+      .pipe(
+        tap((tenants) => {
+          this.gettingAllViolations = true;
+          this.progressBar.constant = 100 / tenants.length;
+          this.progressBar.value = this.progressBar.constant;
+          this.progressBar.mode = 'determinate';
+        }),
+        mergeMap((tenants) => from(tenants))
+      )
       .pipe(
         concatMap((tenant) => {
           currentCompany = tenant;

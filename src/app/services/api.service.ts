@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { EMPTY, from, Observable } from 'rxjs';
+import { EMPTY, from, mergeMap, Observable } from 'rxjs';
 import { FormattedDateService } from '../web-app/formatted-date.service';
 
 import { IViolations, ICompany } from '../interfaces';

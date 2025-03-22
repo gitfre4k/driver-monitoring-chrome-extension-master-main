@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ApiService } from './api/api.service';
+import { ApiService } from './services/api.service';
 import { CommonModule } from '@angular/common';
 
 import { UrlParamsService } from './chrome/url-params.service';
@@ -46,12 +46,10 @@ export class AppComponent {
   }
 
   getDOTs() {
-    const tenants$ = this.apiService
+    this.apiService
       .getAccessibleTenants()
-      .pipe(mergeMap((tenants) => from(tenants)));
-
-    tenants$
       .pipe(
+        mergeMap((tenants) => from(tenants)),
         concatMap((t) =>
           this.apiService.getDOTInspectionList(t).pipe(
             tap(() => console.log(t.name)),
