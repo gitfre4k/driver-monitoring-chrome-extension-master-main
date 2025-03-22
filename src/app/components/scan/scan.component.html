@@ -1,4 +1,4 @@
-@if (!gettingAllViolations) {
+@if (!scanning) {
 
 <div class="tab-group tab-group-1">
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
@@ -6,31 +6,10 @@
         <mat-button-toggle value="dot" disabled>FMCSA Inpsections</mat-button-toggle>
         <mat-button-toggle value="ude" disabled>Unidentified Events</mat-button-toggle>
     </mat-button-toggle-group>
-    <button mat-raised-button (click)="generateErrorReport()" [disabled]="!errorReport">
-        <mat-icon *ngIf="!!errorReport">priority_high</mat-icon>
-        Generate Error Report</button>
     <button mat-raised-button (click)="getAllViolations()">Scan</button>
 </div>
 
 
 } @else {
-<mat-card id="mat-card-wrapper-2">
-    <mat-card-content>
-        <h2>Violation detection in progress...</h2>
-        <p>{{progressBar.currentCompany}}</p>
-        <section>
-            <mat-progress-bar [mode]="progressBar.mode" [value]="progressBar.value"
-                [bufferValue]="progressBar.bufferValue">
-            </mat-progress-bar>
-        </section>
-        <button mat-button (click)="stopGetAllViolations()">Stop</button>
-        <p class="total-count">Total count: {{progressBar.totalCount}}</p>
-    </mat-card-content>
-    <div class="errors" style="text-align: left;">
-        @for (err of this.errors; track err.company.id) {
-        <p class="errors-company">[{{err.error.name}}] {{err.company.name}}</p>
-
-        }
-    </div>
-</mat-card>
+<app-progress-bar></app-progress-bar>
 }

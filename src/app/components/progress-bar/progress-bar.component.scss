@@ -1,0 +1,24 @@
+#mat-card-wrapper-2 {
+  height: 45%;
+  margin: 16px 8px;
+  text-align: center;
+
+  button {
+    margin-top: 48px;
+  }
+  p {
+    margin-top: 18px;
+    &.total-count {
+      text-align: right;
+    }
+  }
+  .errors {
+    margin-top: 32px;
+    p {
+      margin: 0 16px;
+      &.errors-message {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<mat-card id="mat-card-wrapper-2">
+    <mat-card-content>
+        <h2>Violation detection in progress...</h2>
+        <p>{{progressBar.currentCompany}}</p>
+        <section>
+            <mat-progress-bar [mode]="progressBar.mode" [value]="progressBar.value"
+                [bufferValue]="progressBar.bufferValue">
+            </mat-progress-bar>
+        </section>
+        <button mat-button (click)="stopGetAllViolations()">Stop</button>
+        <p class="total-count">Total count: {{progressBar.totalCount}}</p>
+    </mat-card-content>
+    <div class="errors" style="text-align: left;">
+        @for (err of this.errors; track err.company.id) {
+        <p class="errors-company">[{{err.error.name}}] {{err.company.name}}</p>
+
+        }
+    </div>
+</mat-card>
